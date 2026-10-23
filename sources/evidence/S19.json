@@ -1,0 +1,29 @@
+{
+  "id": "S19",
+  "name": "DSH ReactLoopAgent",
+  "kind": "official source code",
+  "url": "https://github.com/deepseek-ai/deepseek-harness/blob/687f282e8625c6b8d11ff58211a90524be2e4317/packages/core/agent-loop/src/agent.ts#L260",
+  "checked_on": "2026-10-23",
+  "status": "read_at_run_time",
+  "version": "687f282e8625c6b8d11ff58211a90524be2e4317",
+  "repository": "deepseek-ai/deepseek-harness",
+  "path": "packages/core/agent-loop/src/agent.ts",
+  "locator": "[(260, 313), (675, 703)]",
+  "sha256": "4add12f5c22bb1b8cf1dbc239c9b09fa3351feff2c936cb2b8900036468bd01b",
+  "says": "预步骤扩展点与 session 日志投影参与循环。",
+  "does_not_claim": "日志有记录就证明推理或事实正确。",
+  "example": "审查模型可见历史来自哪些事件。",
+  "confidence": "high: static code reading only",
+  "excerpts": [
+    {
+      "start": 260,
+      "end": 313,
+      "text": "260:         const { turn, wakeRequested } = this.phase\n261:         this.setPhase({ kind: 'idle', lastTurn: turn })\n262:         if (wakeRequested && this.inbox.hasPending) this.wakeDriver()\n263:       }\n264:     }\n265:   }\n266: \n267:   private async preStep(target: InboxTarget, position: { turn: number; step: number }): Promise<PreparedStep> {\n268:     /* v8 ignore next -- private callers establish the running phase before proposing a step */\n269:     if (this.phase.kind !== 'running') throw new Error(`agent \"${this.id}\": pre-step outside running phase`)\n270:     const signal = this.phase.abort.signal\n271:     const claimed = this.inbox.claim(target, position.turn)\n272:     const assembly = await this.loopCtx.systemPrompt.assemble(assembleContextFor(this, signal))\n273:     signal.throwIfAborted()\n274:     const decision = await this.dispatch.waterfall(\n275:       'agent/pre-step', { messages: claimed, ...position, signal },\n276:       (): Promise<PreStepDecision> => {\n277:         const sections = renderContextSections(assembly)\n278:         const context = this.runtimeContext.project(joinContextSections(sections), sections)\n279:         return Promise.resolve<PreStepDecision>({\n280:           kind: 'enter',\n281:           messages: context === undefined ? claimed : [...claimed, context],\n282:         })\n283:       },\n284:     )\n285:     signal.throwIfAborted()\n286:     if (decision.kind === 'reject') return decision\n287:     return { ...decision, assembly }\n288:   }\n289: \n290:   /** Whether the assembled tool schemas differ from the logged request header's. */\n291:   private toolsChanged(tools: PromptAssembly['tools']): boolean {\n292:     const baseline = this.session.requestHeader()\n293:     if (baseline === undefined) return false\n294:     return !headerEquals(baseline, canonicalHeader({ ...baseline, tools: [...tools] }))\n295:   }\n296: \n297:   /** Open one turn before claiming its first proposed step. */\n298:   private async turn(): Promise<boolean> {\n299:     if (this.phase.kind !== 'running') {\n300:       this.throwError(new Error(`agent \"${this.id}\": turn without driver reservation`))\n301:     }\n302:     const phase = this.phase\n303:     const { signal } = phase.abort\n304:     signal.throwIfAborted()\n305:     const turn = phase.turn + 1\n306:     try {\n307:       this.session.append('turn/start', { turn })\n308:     } catch (error: unknown) {\n309:       this.throwError(error)\n310:     }\n311:     phase.turn = turn\n312:     let turnEnds: TurnEndReason | null = null\n313:     let target: InboxTarget = 'next-turn'"
+    },
+    {
+      "start": 675,
+      "end": 703,
+      "text": "675:       ...systemPromptUpdate === undefined ? {} : { systemPromptUpdate },\n676:     }\n677:     const previousContext = session.requestContext()\n678:     if (previousContext?.provider !== requestContext.provider\n679:       || previousContext.model !== requestContext.model\n680:       || previousContext.contextWindow !== requestContext.contextWindow\n681:       || previousContext.systemPromptUpdate !== requestContext.systemPromptUpdate) {\n682:       session.append('request/context', requestContext)\n683:     }\n684:     signal.throwIfAborted()\n685: \n686:     // canonicalHeader is shallow; append logs a detached snapshot, not these local values.\n687:     deepFreeze(header)\n688:     const boundaryMessages = session.deriveMessages()\n689:     for (const message of boundaryMessages) {\n690:       if (this.frozenMessages.has(message)) continue\n691:       deepFreeze(message)\n692:       this.frozenMessages.add(message)\n693:     }\n694:     Object.freeze(boundaryMessages)\n695:     const request = markAgentLoopRequest(Object.freeze({\n696:       ...header.config,\n697:       messages: boundaryMessages,\n698:       toolHistory: session.toolHistory(),\n699:       ...header.tools !== undefined ? { tools: header.tools } : {},\n700:       sessionId: this.session.id,\n701:       signal,\n702:     }))\n703:     return request"
+    }
+  ]
+}

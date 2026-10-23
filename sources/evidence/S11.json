@@ -1,0 +1,34 @@
+{
+  "id": "S11",
+  "name": "Codex ToolOrchestrator",
+  "kind": "official source code",
+  "url": "https://github.com/openai/codex/blob/8531184b49bcb160175a84e140b659a83a426df7/codex-rs/core/src/tools/orchestrator.rs#L1",
+  "checked_on": "2026-10-23",
+  "status": "read_at_run_time",
+  "version": "8531184b49bcb160175a84e140b659a83a426df7",
+  "repository": "openai/codex",
+  "path": "codex-rs/core/src/tools/orchestrator.rs",
+  "locator": "[(1, 4), (130, 180), (280, 305)]",
+  "sha256": "8996f718b818804473c151a8a643747c2b5ab69b05f4630eee143fac7daa0bb5",
+  "says": "工具编排协调审批、沙箱选择及拒绝后重试。",
+  "does_not_claim": "沙箱保证内容正确，或所有动作都会弹窗。",
+  "example": "文件可写权限与事实可信度是两种检查。",
+  "confidence": "high: static code reading only",
+  "excerpts": [
+    {
+      "start": 1,
+      "end": 4,
+      "text": "1: //! Coordinates tool approval, sandbox selection, and retries after sandbox denial.\n2: //! Guardian approval applies to the reviewed authority; escalating a sandboxed\n3: //! attempt requires a fresh review of the retry.\n4: use crate::config::NetworkProxySpec;"
+    },
+    {
+      "start": 130,
+      "end": 180,
+      "text": "130:     ) -> Result<OrchestratorRunResult<Out>, ToolError>\n131:     where\n132:         T: ToolRuntime<Rq, Out>,\n133:     {\n134:         let turn_ctx = tool_ctx.step_context.turn.as_ref();\n135:         let approval_policy = tool_ctx.step_context.settings.approval_policy();\n136:         let otel = turn_ctx.session_telemetry.clone();\n137:         let otel_tn = flat_tool_name(&tool_ctx.tool_name).into_owned();\n138:         let otel_ci = &tool_ctx.call_id;\n139:         let strict_auto_review = turn_ctx.strict_auto_review_enabled();\n140:         // 1) Approval\n141:         let mut initial_approval_source = None;\n142: \n143:         let environment = tool.turn_environment(req);\n144:         let sandbox_manager = SandboxManager::new();\n145:         #[cfg(target_os = \"macos\")]\n146:         let sandbox_manager = sandbox_manager.with_allowed_symlinked_codex_home(\n147:             environment\n148:                 .environment\n149:                 .local_runtime_paths()\n150:                 .and_then(|paths| paths.allowed_symlinked_codex_home.clone()),\n151:         );\n152:         let sandbox_config = environment.config();\n153:         let owner_network_policy = sandbox_config.network_policy.is_some();\n154:         let workspace_roots = environment.workspace_roots();\n155:         let executor_managed_process_sandbox = tool.uses_executor_managed_process_sandbox(req);\n156:         let permission_profile = environment.permission_profile();\n157:         let permissions = if executor_managed_process_sandbox {\n158:             // Executor-native roots remain symbolic until the executor applies its own sandbox.\n159:             permission_profile.clone()\n160:         } else {\n161:             environment.permission_profile_with_workspace_roots()\n162:         };\n163:         let file_system_sandbox_policy = permissions.file_system_sandbox_policy();\n164:         let requirement = tool.exec_approval_requirement(req).unwrap_or_else(|| {\n165:             default_exec_approval_requirement(approval_policy, &file_system_sandbox_policy)\n166:         });\n167:         match &requirement {\n168:             ExecApprovalRequirement::Skip { .. } => {\n169:                 if strict_auto_review {\n170:                     let action = tool\n171:                         .approval_action(req, &tool_ctx.call_id)\n172:                         .map_err(|err| {\n173:                             ToolError::Rejected(format!(\"could not prepare approval action: {err}\"))\n174:                         })?;\n175:                     let approval_ctx = ApprovalContext {\n176:                         review_context: GuardianReviewContext::from(&tool_ctx.step_context),\n177:                         cancellation_token: Some(tool_ctx.cancellation_token.clone()),\n178:                         call_id: tool_ctx.call_id.clone(),\n179:                         tool_name: tool_ctx.tool_name.clone(),\n180:                         strict_auto_review,"
+    },
+    {
+      "start": 280,
+      "end": 305,
+      "text": "280:                 ));\n281:             }\n282:         }\n283:         let escalated_local_profile = escalated_profile\n284:             .as_ref()\n285:             .filter(|_| !executor_managed_process_sandbox)\n286:             .map(|profile| {\n287:                 profile\n288:                     .clone()\n289:                     .materialize_project_roots_with_path_uris(workspace_roots)\n290:             });\n291:         let initial_permissions = escalated_local_profile\n292:             .as_ref()\n293:             .or(escalated_profile.as_ref())\n294:             .unwrap_or(&permissions);\n295:         let network_approval_spec = tool.network_approval_spec(req, tool_ctx);\n296:         // An explicit owner proxy requirement permits filtered egress, like an enabled\n297:         // controller proxy. Traffic-only owner policies stay offline unless command\n298:         // permissions grant networking.\n299:         // Preserve this baseline even when escalation skips the execution proxy, so retained\n300:         // terminals still record that their launch bypassed network restrictions.\n301:         let managed_network_active = if owner_network_policy {\n302:             turn_ctx\n303:                 .config\n304:                 .permissions\n305:                 .network"
+    }
+  ]
+}

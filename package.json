@@ -1,0 +1,12 @@
+{
+  "name":"codex-ai-tech-talk",
+  "private":true,
+  "version":"0.1.0",
+  "description":"Codex + Skill research-to-slides workflow starter",
+  "scripts":{
+    "build":"node scripts/build_deck.js",
+    "check":"node scripts/check_deck.js",
+    "render":"python3 scripts/render_preview.py"
+  },
+  "dependencies":{"pptxgenjs":"^3.12.0"}
+}

@@ -1,0 +1,29 @@
+{
+  "id": "S13",
+  "name": "LangGraph BaseCheckpointSaver",
+  "kind": "official source code",
+  "url": "https://github.com/langchain-ai/langgraph/blob/9d68e5b3eb1a63027b05e9f0152149ea0284dcdb/libs/checkpoint/langgraph/checkpoint/base/__init__.py#L93",
+  "checked_on": "2026-10-23",
+  "status": "read_at_run_time",
+  "version": "9d68e5b3eb1a63027b05e9f0152149ea0284dcdb",
+  "repository": "langchain-ai/langgraph",
+  "path": "libs/checkpoint/langgraph/checkpoint/base/__init__.py",
+  "locator": "[(93, 130), (199, 230)]",
+  "sha256": "e1b412fb541b47cf9ab0657f5c160c955c71ce929d8ac786f0bcc94d356481e9",
+  "says": "Checkpoint 保存通道值和版本；以 thread_id 检索线程状态。",
+  "does_not_claim": "checkpoint 是可执行进程内存快照，或恢复撤销外部副作用。",
+  "example": "记录已确认 claims 与待完成节点。",
+  "confidence": "high: static code reading only",
+  "excerpts": [
+    {
+      "start": 93,
+      "end": 130,
+      "text": "93: class Checkpoint(TypedDict):\n94:     \"\"\"State snapshot at a given point in time.\"\"\"\n95: \n96:     v: int\n97:     \"\"\"The version of the checkpoint format. Currently `1`.\"\"\"\n98:     id: str\n99:     \"\"\"The ID of the checkpoint.\n100:     \n101:     This is both unique and monotonically increasing, so can be used for sorting\n102:     checkpoints from first to last.\"\"\"\n103:     ts: str\n104:     \"\"\"The timestamp of the checkpoint in ISO 8601 format.\"\"\"\n105:     channel_values: dict[str, Any]\n106:     \"\"\"The values of the channels at the time of the checkpoint.\n107:     \n108:     Mapping from channel name to deserialized channel snapshot value.\n109:     \"\"\"\n110:     channel_versions: ChannelVersions\n111:     \"\"\"The versions of the channels at the time of the checkpoint.\n112:     \n113:     The keys are channel names and the values are monotonically increasing\n114:     version strings for each channel.\n115:     \"\"\"\n116:     versions_seen: dict[str, ChannelVersions]\n117:     \"\"\"Map from node ID to map from channel name to version seen.\n118:     \n119:     This keeps track of the versions of the channels that each node has seen.\n120:     Used to determine which nodes to execute next.\n121:     \"\"\"\n122:     updated_channels: list[str] | None\n123:     \"\"\"The channels that were updated in this checkpoint.\n124:     \"\"\"\n125: \n126: \n127: def copy_checkpoint(checkpoint: Checkpoint) -> Checkpoint:\n128:     return Checkpoint(\n129:         v=checkpoint[\"v\"],\n130:         ts=checkpoint[\"ts\"],"
+    },
+    {
+      "start": 199,
+      "end": 230,
+      "text": "199: class BaseCheckpointSaver(Generic[V]):\n200:     \"\"\"Base class for creating a graph checkpointer.\n201: \n202:     Checkpointers allow LangGraph agents to persist their state\n203:     within and across multiple interactions.\n204: \n205:     When a checkpointer is configured, you should pass a `thread_id` in the config when\n206:     invoking the graph:\n207: \n208:     ```python\n209:     config = {\"configurable\": {\"thread_id\": \"my-thread\"}}\n210:     graph.invoke(inputs, config)\n211:     ```\n212: \n213:     The `thread_id` is the primary key used to store and retrieve checkpoints. Without\n214:     it, the checkpointer cannot save state, resume from interrupts, or enable\n215:     time-travel debugging.\n216: \n217:     How you choose ``thread_id`` depends on your use case:\n218: \n219:     - **Single-shot workflows**: Use a unique ID (e.g., uuid4) for each run when\n220:         executions are independent.\n221:     - **Conversational memory**: Reuse the same `thread_id` across invocations\n222:         to accumulate state (e.g., chat history) within a conversation.\n223: \n224:     Attributes:\n225:         serde (SerializerProtocol): Serializer for encoding/decoding checkpoints.\n226: \n227:     Note:\n228:         When creating a custom checkpoint saver, consider implementing async\n229:         versions to avoid blocking the main thread.\n230:     \"\"\""
+    }
+  ]
+}

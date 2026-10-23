@@ -1,0 +1,29 @@
+{
+  "id": "S18",
+  "name": "LangGraph BaseStore",
+  "kind": "official source code",
+  "url": "https://github.com/langchain-ai/langgraph/blob/9d68e5b3eb1a63027b05e9f0152149ea0284dcdb/libs/checkpoint/langgraph/store/base/__init__.py#L1",
+  "checked_on": "2026-10-23",
+  "status": "read_at_run_time",
+  "version": "9d68e5b3eb1a63027b05e9f0152149ea0284dcdb",
+  "repository": "langchain-ai/langgraph",
+  "path": "libs/checkpoint/langgraph/store/base/__init__.py",
+  "locator": "[(1, 12), (708, 736)]",
+  "sha256": "b44aef2b8aa293fdf6c9dac2bc003ab6108da7127e4a45e3611cb619997b1b8c",
+  "says": "跨线程 key-value Store 使用 namespace；语义搜索与 TTL 依实现和配置。",
+  "does_not_claim": "Store 自动选择值得记住的信息、自动纠错或默认有向量搜索。",
+  "example": "namespace=(alumni,style)，保留演讲偏好。",
+  "confidence": "high: static code reading only",
+  "excerpts": [
+    {
+      "start": 1,
+      "end": 12,
+      "text": "1: \"\"\"Base classes and types for persistent key-value stores.\n2: \n3: Stores provide long-term memory that persists across threads and conversations.\n4: Supports hierarchical namespaces, key-value storage, and optional vector search.\n5: \n6: Core types:\n7:     - `BaseStore`: Store interface with sync/async operations\n8:     - `Item`: Stored key-value pairs with metadata\n9:     - `Op`: Get/Put/Search/List operations\n10: \"\"\"\n11: \n12: from __future__ import annotations"
+    },
+    {
+      "start": 708,
+      "end": 736,
+      "text": "708: class BaseStore(ABC):\n709:     \"\"\"Abstract base class for persistent key-value stores.\n710: \n711:     Stores enable persistence and memory that can be shared across threads,\n712:     scoped to user IDs, assistant IDs, or other arbitrary namespaces.\n713:     Some implementations may support semantic search capabilities through\n714:     an optional `index` configuration.\n715: \n716:     Note:\n717:         Semantic search capabilities vary by implementation and are typically\n718:         disabled by default. Stores that support this feature can be configured\n719:         by providing an `index` configuration at creation time. Without this\n720:         configuration, semantic search is disabled and any `index` arguments\n721:         to storage operations will have no effect.\n722: \n723:         Similarly, TTL (time-to-live) support is disabled by default.\n724:         Subclasses must explicitly set `supports_ttl = True` to enable this feature.\n725:     \"\"\"\n726: \n727:     supports_ttl: bool = False\n728:     ttl_config: TTLConfig | None = None\n729: \n730:     __slots__ = (\"__weakref__\",)\n731: \n732:     @abstractmethod\n733:     def batch(self, ops: Iterable[Op]) -> list[Result]:\n734:         \"\"\"Execute multiple operations synchronously in a single batch.\n735: \n736:         Args:"
+    }
+  ]
+}

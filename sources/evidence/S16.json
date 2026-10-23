@@ -1,0 +1,24 @@
+{
+  "id": "S16",
+  "name": "DSH AgentLoop service",
+  "kind": "official source code",
+  "url": "https://github.com/deepseek-ai/deepseek-harness/blob/687f282e8625c6b8d11ff58211a90524be2e4317/packages/core/agent-loop/src/index.ts#L338",
+  "checked_on": "2026-10-23",
+  "status": "read_at_run_time",
+  "version": "687f282e8625c6b8d11ff58211a90524be2e4317",
+  "repository": "deepseek-ai/deepseek-harness",
+  "path": "packages/core/agent-loop/src/index.ts",
+  "locator": "[(338, 365)]",
+  "sha256": "3ea0262656c8ddcaa3be315c150bdc2af09371031c3c471d4ded511e21c6e86b",
+  "says": "AgentLoop 是 Cordis Service，注入 agents/sessions/llm/tools/systemPrompt 等依赖。",
+  "does_not_claim": "一切皆插件就等于安全热替换已验证。",
+  "example": "组合不同工具或模型适配，不改业务 UI。",
+  "confidence": "high: static code reading only",
+  "excerpts": [
+    {
+      "start": 338,
+      "end": 365,
+      "text": "338: }\n339: \n340: /** Concrete agent factory and driver service. */\n341: export class AgentLoop extends Service implements AgentFactory {\n342:   static inject = ['agents', 'sessions', 'llm', 'tools', 'systemPrompt', 'sessionProjections']\n343: \n344:   /** Runtime schema for declarative agents. */\n345:   static Config: z<{ agents?: Config['agents']; maxParallelToolCalls?: number }, Config> = z.object({\n346:     maxParallelToolCalls: z.number().step(1).min(1).default(DEFAULT_MAX_PARALLEL_TOOL_CALLS).volatile(),\n347:     agents: z.array(z.object({\n348:       id: z.string().required(),\n349:       sessionId: z.string().min(1),\n350:       provider: z.string(),\n351:       model: z.string(),\n352:       reasoningEffort: z.string().min(1) as z<ReturnType<typeof ReasoningEffortId>>,\n353:       maxTokens: z.number().step(1).min(1).max(Number.MAX_SAFE_INTEGER),\n354:       cwd: z.string(),\n355:       resumeSessionId: z.string(),\n356:     })).default([]),\n357:   }) as z<{ agents?: Config['agents']; maxParallelToolCalls?: number }, Config>\n358: \n359:   /** Validated configuration owned by the agent-loop service. */\n360:   readonly config: Config\n361:   private readonly ownership: FactoryOwnership\n362:   /** Plain holder prevents Cordis from re-tracing the factory's dependency context through a caller shadow. */\n363:   private readonly runtime: { ctx: Context }\n364: \n365:   constructor(ctx: Context, config: Config) {"
+    }
+  ]
+}

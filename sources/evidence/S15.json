@@ -1,0 +1,29 @@
+{
+  "id": "S15",
+  "name": "DGM authors README",
+  "kind": "paper authors source code",
+  "url": "https://github.com/jennyzzt/dgm/blob/a565fd2d1dca504ef5104a7cc0f3bdc4ab9b4fd2/README.md#L20",
+  "checked_on": "2026-10-23",
+  "status": "read_at_run_time",
+  "version": "a565fd2d1dca504ef5104a7cc0f3bdc4ab9b4fd2",
+  "repository": "jennyzzt/dgm",
+  "path": "README.md",
+  "locator": "[(20, 32), (75, 104)]",
+  "sha256": "9760f30330e519946592ae88178f579dd717c3e55d3d461322e5facfa09c6bd4",
+  "says": "作者将系统描述为代码自修改加编码基准验证。",
+  "does_not_claim": "已在本次环境复现论文结果。",
+  "example": "研究讨论保留设计而不复述成绩排名。",
+  "confidence": "high: static code reading only",
+  "excerpts": [
+    {
+      "start": 20,
+      "end": 32,
+      "text": "20: <img src=\"./misc/conceptual.svg\"/></a><br>\n21: </p> -->\n22: \n23: \n24: ## Setup\n25: ```bash\n26: # API keys, add to ~/.bashrc\n27: export OPENAI_API_KEY='...'\n28: export ANTHROPIC_API_KEY='...'\n29: ```\n30: \n31: ```bash\n32: # Verify that Docker is properly configured in your environment."
+    },
+    {
+      "start": 75,
+      "end": 104,
+      "text": "75: - `swe_bench/` code needed for SWE-bench evaluation\n76: - `polyglot/` code needed for Polyglot evaluation\n77: - `prompts/` prompts used for foundation models\n78: - `tests/` tests for the DGM system\n79: - `tools/` tools available to the foundation models\n80: - `coding_agent.py` main implementation of the initial coding agent\n81: - `DGM_outer.py` entry point for running the DGM algorithm\n82: \n83: ## Logs from Experiments\n84: This [google drive folder](https://drive.google.com/drive/folders/1Kcu9TbIa9Z50pJ7S6hH9omzzD1pxIYZC?usp=sharing) contains all the foundation model output logs from the experiments shown in the paper.\n85: \n86: ## Safety Consideration\n87: > [!WARNING]  \n88: > This repository involves executing untrusted, model-generated code. We strongly advise users to be aware of the associated safety risks. While it is highly unlikely that such code will perform overtly malicious actions under our current settings and with the models we use, it may still behave destructively due to limitations in model capability or alignment. By using this repository, you acknowledge and accept these risks.\n89: \n90: ## Acknowledgement\n91: \n92: The evaluation framework implementations are based on the [SWE-bench](https://github.com/swe-bench/SWE-bench) and [polyglot-benchmark](https://github.com/Aider-AI/polyglot-benchmark) repositories.\n93: \n94: ## Citing\n95: If you find this project useful, please consider citing:\n96: ```bibtex\n97: @article{zhang2025darwin,\n98:   title={Darwin Godel Machine: Open-Ended Evolution of Self-Improving Agents},\n99:   author={Zhang, Jenny and Hu, Shengran and Lu, Cong and Lange, Robert and Clune, Jeff},\n100:   journal={arXiv preprint arXiv:2505.22954},\n101:   year={2025}\n102: }\n103: ```"
+    }
+  ]
+}

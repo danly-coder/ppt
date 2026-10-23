@@ -1,0 +1,224 @@
+{
+  "checked_on": "2026-10-23",
+  "claims": [
+    {
+      "id": "C01",
+      "kind": "fact",
+      "claim": "Codex 的 Harness 包含 Agent Loop、工具策略与线程持久化。",
+      "source_ids": [
+        "S02",
+        "S10",
+        "S11"
+      ],
+      "locator": "Inside the harness; run_turn; ToolOrchestrator",
+      "confidence": "high",
+      "checked_on": "2026-10-23"
+    },
+    {
+      "id": "C02",
+      "kind": "fact",
+      "claim": "DSH 的循环、模型、工具和会话可作为 Cordis 插件组合。",
+      "source_ids": [
+        "S04",
+        "S16"
+      ],
+      "locator": "Cordis; AgentLoop.static inject",
+      "confidence": "high",
+      "checked_on": "2026-10-23"
+    },
+    {
+      "id": "C03",
+      "kind": "fact",
+      "claim": "LangGraph checkpointer 按 thread 管状态，Store 可跨 thread 使用。",
+      "source_ids": [
+        "S05",
+        "S12",
+        "S13",
+        "S18"
+      ],
+      "locator": "Persistence; compile; BaseCheckpointSaver; BaseStore",
+      "confidence": "high",
+      "checked_on": "2026-10-23"
+    },
+    {
+      "id": "C04",
+      "kind": "fact",
+      "claim": "OpenHands Conversation 根据 workspace 返回本地或远程实现。",
+      "source_ids": [
+        "S07",
+        "S17"
+      ],
+      "locator": "Conversation.__new__",
+      "confidence": "high",
+      "checked_on": "2026-10-23"
+    },
+    {
+      "id": "C05",
+      "kind": "fact",
+      "claim": "OpenHands step 使用会话视图并可先产生压缩事件。",
+      "source_ids": [
+        "S14"
+      ],
+      "locator": "Agent._step 690–757",
+      "confidence": "high",
+      "checked_on": "2026-10-23"
+    },
+    {
+      "id": "C06",
+      "kind": "fact",
+      "claim": "Skill 可封装说明、脚本与参考资料，并按需加载。",
+      "source_ids": [
+        "S09"
+      ],
+      "locator": "SKILL.md; progressive disclosure",
+      "confidence": "high",
+      "checked_on": "2026-10-23"
+    },
+    {
+      "id": "C07",
+      "kind": "synthesis",
+      "claim": "Tool 是动作接口，MCP 是连接协议，Skill 是任务方法包；三者可组合。",
+      "source_ids": [
+        "S02",
+        "S09",
+        "S21"
+      ],
+      "locator": "跨项目工作定义；不是互斥分类",
+      "confidence": "high",
+      "checked_on": "2026-10-23"
+    },
+    {
+      "id": "C08",
+      "kind": "synthesis",
+      "claim": "Agent 指反馈驱动的决策行为；Harness 指承载运行的系统；framework 提供构建抽象。",
+      "source_ids": [
+        "S01",
+        "S02",
+        "S12",
+        "S22"
+      ],
+      "locator": "讲解用边界，各项目命名不同",
+      "confidence": "high",
+      "checked_on": "2026-10-23"
+    },
+    {
+      "id": "C09",
+      "kind": "fact",
+      "claim": "上下文工程处理当前模型输入的信息选择与维护。",
+      "source_ids": [
+        "S06"
+      ],
+      "locator": "Context engineering vs. prompt engineering",
+      "confidence": "high",
+      "checked_on": "2026-10-23"
+    },
+    {
+      "id": "C10",
+      "kind": "synthesis",
+      "claim": "Context 是模型本轮输入；State 是程序保存的任务记录；Memory 是可复用保留信息，后两者可重叠。",
+      "source_ids": [
+        "S13",
+        "S14",
+        "S18"
+      ],
+      "locator": "教学视图；State 不保证语义真实",
+      "confidence": "high",
+      "checked_on": "2026-10-23"
+    },
+    {
+      "id": "C11",
+      "kind": "fact",
+      "claim": "InMemorySaver 重启不保留；BaseStore 向量检索和 TTL 取决于实现/配置。",
+      "source_ids": [
+        "S05",
+        "S18"
+      ],
+      "locator": "Troubleshooting; BaseStore docstring",
+      "confidence": "high",
+      "checked_on": "2026-10-23"
+    },
+    {
+      "id": "C12",
+      "kind": "synthesis",
+      "claim": "可信记忆需要来源、适用范围、版本、纠错和失效策略。",
+      "source_ids": [
+        "S18",
+        "S06"
+      ],
+      "locator": "本次设计建议，不是框架默认保证",
+      "confidence": "high",
+      "checked_on": "2026-10-23"
+    },
+    {
+      "id": "C13",
+      "kind": "synthesis",
+      "claim": "构建通过、事实正确和演讲易懂需要分别验证。",
+      "source_ids": [
+        "S11",
+        "S13"
+      ],
+      "locator": "从执行/状态机制归纳；项目验收方案",
+      "confidence": "high",
+      "checked_on": "2026-10-23"
+    },
+    {
+      "id": "C14",
+      "kind": "synthesis",
+      "claim": "评测改进需固定任务、独立验收并观察成本和人工介入。",
+      "source_ids": [
+        "S20"
+      ],
+      "locator": "将 DGM 的经验验证思路迁移到本案例",
+      "confidence": "high",
+      "checked_on": "2026-10-23"
+    },
+    {
+      "id": "C15",
+      "kind": "fact",
+      "claim": "DGM 维护候选档案，在编码评测中经验验证代码自修改；不等于数学证明。",
+      "source_ids": [
+        "S08",
+        "S15",
+        "S20"
+      ],
+      "locator": "paper abstract; choose_selfimproves/update_archive",
+      "confidence": "high",
+      "checked_on": "2026-10-23"
+    },
+    {
+      "id": "C16",
+      "kind": "synthesis",
+      "claim": "任务内修正、积累记忆和修改 Agent 自身属于不同层次的变化。",
+      "source_ids": [
+        "S10",
+        "S18",
+        "S20"
+      ],
+      "locator": "教学分层，不是统一 RSI 分类标准",
+      "confidence": "high",
+      "checked_on": "2026-10-23"
+    },
+    {
+      "id": "C17",
+      "kind": "hypothesis",
+      "claim": "本案例的失败轨迹可用于提出 Harness 或 Skill 改动，再用未见任务检验迁移。",
+      "source_ids": [
+        "S20"
+      ],
+      "locator": "待设计实验，没有本次性能数据",
+      "confidence": "medium",
+      "checked_on": "2026-10-23"
+    },
+    {
+      "id": "C18",
+      "kind": "hypothesis",
+      "claim": "校友团队可先用单 Agent 加独立验证，按瓶颈决定是否多 Agent。",
+      "source_ids": [
+        "S22"
+      ],
+      "locator": "场景建议，非性能结论",
+      "confidence": "medium",
+      "checked_on": "2026-10-23"
+    }
+  ]
+}

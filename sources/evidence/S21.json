@@ -1,0 +1,29 @@
+{
+  "id": "S21",
+  "name": "DSH guarded tools",
+  "kind": "official source code",
+  "url": "https://github.com/deepseek-ai/deepseek-harness/blob/687f282e8625c6b8d11ff58211a90524be2e4317/packages/core/tools/src/index.ts#L725",
+  "checked_on": "2026-10-23",
+  "status": "read_at_run_time",
+  "version": "687f282e8625c6b8d11ff58211a90524be2e4317",
+  "repository": "deepseek-ai/deepseek-harness",
+  "path": "packages/core/tools/src/index.ts",
+  "locator": "[(725, 739), (1500, 1537)]",
+  "sha256": "398bcdeb221e450d088510830b77d99a513e65ab31e40ade71688a19cdf5e6aa",
+  "says": "扩展 pre-execute 流水线后还有执行 guard。",
+  "does_not_claim": "随便挂插件就应绕过权限边界。",
+  "example": "新增网页检索工具同时测试政策和记录。",
+  "confidence": "high: static code reading only",
+  "excerpts": [
+    {
+      "start": 725,
+      "end": 739,
+      "text": "725:  * A monotonic execution guard evaluated after every `tools/pre-execute`\n726:  * listener and before the tool body. Returning a reason denies the call;\n727:  * returning `undefined` leaves it unchanged. Because guards have no allow\n728:  * result, listener ordering cannot turn a denial back into permission.\n729:  * @param execution - the identity-protected call after extensible pre-execute policy completed.\n730:  * @returns a final denial reason, or `undefined` to leave the call allowed.\n731:  */\n732: export type ToolGuard = (execution: Readonly<ToolExecution>) => string | undefined\n733: \n734: /** One scope's complete tool-registry contribution. */\n735: class ToolLayer implements ScopeLayer {\n736:   readonly tools: NamedEntries<ToolDefinition>\n737:   readonly restrictions = new AnonymousEntries<CompiledToolRestriction>()\n738:   readonly guards = new AnonymousEntries<ToolGuard>()\n739:   /**"
+    },
+    {
+      "start": 1500,
+      "end": 1537,
+      "text": "1500: \n1501:   private async prepareExecution<T>(\n1502:     input: ToolExecutionInput,\n1503:     next: (prepared: ScheduledToolPreparation) => T | PromiseLike<T>,\n1504:   ): Promise<T> {\n1505:     const created = this.createExecution(input)\n1506:     if (created.kind !== 'ready') return next(created)\n1507:     const exec = created.exec\n1508:     if (this.callerCancelled(exec)) {\n1509:       return next({ kind: 'final-result', exec, result: toolAbortedBeforeDispatchResult() })\n1510:     }\n1511:     try {\n1512:       const carrier = scopeTarget(this, exec.agent)\n1513:       const gate = await this.ctx.waterfall(\n1514:         carrier, 'tools/pre-execute', exec,\n1515:         () => Promise.resolve<PreToolDecision>({ kind: 'allow' }),\n1516:       )\n1517:       const askResolution = gate.kind === 'ask'\n1518:         ? await this.serviceAsk(exec, gate)\n1519:         : { decision: gate, approvalCancelled: false }\n1520:       const { decision } = askResolution\n1521:       if (this.callerCancelled(exec) && askResolution.approvalCancelled) {\n1522:         return await next({ kind: 'post-result', exec, result: toolAbortedBeforeDispatchResult() })\n1523:       }\n1524:       if (decision.kind === 'cancel') {\n1525:         return await next({ kind: 'post-result', exec, result: toolAbortedBeforeDispatchResult() })\n1526:       }\n1527:       const denialReason = decision.kind === 'allow' ? this.guardReason(exec) : decision.reason\n1528:       const denialInfo = decision.kind === 'deny' ? decision.info : undefined\n1529:       if (denialReason !== undefined) {\n1530:         return await next({\n1531:           kind: 'post-result',\n1532:           exec,\n1533:           result: this.materializeFinalResult({\n1534:             content: [{ type: 'text', text: `Error: ${denialReason}` }],\n1535:             isError: true,\n1536:             error: { message: denialReason, ...denialInfo === undefined ? {} : { info: denialInfo } },\n1537:           }),"
+    }
+  ]
+}

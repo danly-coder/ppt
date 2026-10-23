@@ -1,0 +1,145 @@
+{
+  "renderer": "LibreOffice + PyMuPDF",
+  "pages": 23,
+  "checks": [
+    {
+      "slide": 1,
+      "title_found": true,
+      "text_spans": 12,
+      "off_page_text": []
+    },
+    {
+      "slide": 2,
+      "title_found": true,
+      "text_spans": 18,
+      "off_page_text": []
+    },
+    {
+      "slide": 3,
+      "title_found": true,
+      "text_spans": 19,
+      "off_page_text": []
+    },
+    {
+      "slide": 4,
+      "title_found": true,
+      "text_spans": 21,
+      "off_page_text": []
+    },
+    {
+      "slide": 5,
+      "title_found": true,
+      "text_spans": 18,
+      "off_page_text": []
+    },
+    {
+      "slide": 6,
+      "title_found": true,
+      "text_spans": 19,
+      "off_page_text": []
+    },
+    {
+      "slide": 7,
+      "title_found": true,
+      "text_spans": 17,
+      "off_page_text": []
+    },
+    {
+      "slide": 8,
+      "title_found": true,
+      "text_spans": 21,
+      "off_page_text": []
+    },
+    {
+      "slide": 9,
+      "title_found": true,
+      "text_spans": 21,
+      "off_page_text": []
+    },
+    {
+      "slide": 10,
+      "title_found": true,
+      "text_spans": 21,
+      "off_page_text": []
+    },
+    {
+      "slide": 11,
+      "title_found": true,
+      "text_spans": 19,
+      "off_page_text": []
+    },
+    {
+      "slide": 12,
+      "title_found": true,
+      "text_spans": 25,
+      "off_page_text": []
+    },
+    {
+      "slide": 13,
+      "title_found": true,
+      "text_spans": 19,
+      "off_page_text": []
+    },
+    {
+      "slide": 14,
+      "title_found": true,
+      "text_spans": 21,
+      "off_page_text": []
+    },
+    {
+      "slide": 15,
+      "title_found": true,
+      "text_spans": 19,
+      "off_page_text": []
+    },
+    {
+      "slide": 16,
+      "title_found": true,
+      "text_spans": 20,
+      "off_page_text": []
+    },
+    {
+      "slide": 17,
+      "title_found": true,
+      "text_spans": 19,
+      "off_page_text": []
+    },
+    {
+      "slide": 18,
+      "title_found": true,
+      "text_spans": 18,
+      "off_page_text": []
+    },
+    {
+      "slide": 19,
+      "title_found": true,
+      "text_spans": 21,
+      "off_page_text": []
+    },
+    {
+      "slide": 20,
+      "title_found": true,
+      "text_spans": 20,
+      "off_page_text": []
+    },
+    {
+      "slide": 21,
+      "title_found": true,
+      "text_spans": 24,
+      "off_page_text": []
+    },
+    {
+      "slide": 22,
+      "title_found": true,
+      "text_spans": 21,
+      "off_page_text": []
+    },
+    {
+      "slide": 23,
+      "title_found": true,
+      "text_spans": 18,
+      "off_page_text": []
+    }
+  ],
+  "limitations": "Text bounds are not an overlap/semantic correctness guarantee; visual inspection required."
+}

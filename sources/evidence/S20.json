@@ -1,0 +1,34 @@
+{
+  "id": "S20",
+  "name": "DGM outer loop",
+  "kind": "paper authors source code",
+  "url": "https://github.com/jennyzzt/dgm/blob/a565fd2d1dca504ef5104a7cc0f3bdc4ab9b4fd2/DGM_outer.py#L146",
+  "checked_on": "2026-10-23",
+  "status": "read_at_run_time",
+  "version": "a565fd2d1dca504ef5104a7cc0f3bdc4ab9b4fd2",
+  "repository": "jennyzzt/dgm",
+  "path": "DGM_outer.py",
+  "locator": "[(146, 190), (270, 300), (315, 332)]",
+  "sha256": "239bc76f0e1b78210b8f7b3757b1082f6ca07db3537d6af50a45bf97709795ed",
+  "says": "选择父 Agent、产生自修改尝试并更新档案；默认可 keep_all。",
+  "does_not_claim": "只保留本代分数最高者或每一步必须严格变好。",
+  "example": "失败或中等候选也可能成为后续探索起点。",
+  "confidence": "high: static code reading only",
+  "excerpts": [
+    {
+      "start": 146,
+      "end": 190,
+      "text": "146:             entry_ids = unresolved_ids\n147:         entry = random.choice(entry_ids)\n148:         selfimprove_entries.append((parent_commit, entry))\n149: \n150:     return selfimprove_entries\n151: \n152: def filter_compiled(run_ids, output_dir, num_swe_issues=[], logger=None):\n153:     \"\"\"\n154:     Filter out runs that did not compile or have all empty patches.\n155:     \"\"\"\n156:     run_ids_compiled = []\n157: \n158:     logger.info(f\"num_swe_issues: {num_swe_issues}\")\n159:     for run_id in run_ids:\n160:         metadata_path = os.path.join(output_dir, run_id, \"metadata.json\")\n161:         metadata = load_json_file(metadata_path)\n162:         logger.info(f\"{run_id} metadata: {metadata}\")\n163:         if is_compiled_self_improve(metadata, num_swe_issues=num_swe_issues, logger=logger):\n164:             run_ids_compiled.append(run_id)\n165:     return run_ids_compiled\n166: \n167: def get_original_score(output_dir):\n168:     \"\"\"\n169:     Get the original score from the initial version.\n170:     \"\"\"\n171:     metadata = load_json_file(os.path.join(output_dir, \"initial\", \"metadata.json\"))\n172:     return metadata[\"overall_performance\"][\"accuracy_score\"]\n173: \n174: def update_archive(output_dir, archive, new_ids, method='keep_all', noise_leeway=0.1):\n175:     \"\"\"\n176:     Update the archive with the new self-improve runs.\n177:     \"\"\"\n178:     if method == 'keep_better':\n179:         # keep only better ones\n180:         original_score = get_original_score(output_dir) - noise_leeway\n181:         for run_id in new_ids:\n182:             metadata = load_json_file(os.path.join(output_dir, run_id, \"metadata.json\"))\n183:             score = metadata[\"overall_performance\"][\"accuracy_score\"]\n184:             if score >= original_score:\n185:                 archive.append(run_id)\n186:     else:\n187:         # keep everything\n188:         archive += new_ids\n189: \n190:     return archive"
+    },
+    {
+      "start": 270,
+      "end": 300,
+      "text": "270:     for gen_num in range(start_gen_num, args.max_generation):\n271:         # Choose self-improve attempts\n272:         selfimprove_entries = choose_selfimproves(\n273:             output_dir, archive, args.selfimprove_size,\n274:             method=args.choose_selfimproves_method,\n275:             run_baseline=args.run_baseline,\n276:             polyglot=args.polyglot,\n277:         )\n278:         logger.info(f\"Self-improve entries for generation {gen_num}: {selfimprove_entries}\")\n279: \n280:         # Run self-improvement processes\n281:         selfimprove_ids = []\n282:         with ThreadPoolExecutor(max_workers=args.selfimprove_workers) as executor:\n283:             futures = [\n284:                 executor.submit(\n285:                     self_improve,\n286:                     parent_commit=parent_commit,\n287:                     output_dir=output_dir,\n288:                     force_rebuild=False,\n289:                     num_evals=args.num_swe_evals,\n290:                     post_improve_diagnose=args.post_improve_diagnose,\n291:                     entry=entry,\n292:                     test_task_list=swe_issues_sm,\n293:                     test_more_threshold=None if args.shallow_eval else test_more_threshold,\n294:                     test_task_list_more=None if args.shallow_eval else swe_issues_med,\n295:                     polyglot=args.polyglot,\n296:                     full_eval_threshold=None if args.no_full_eval else get_full_eval_threshold(output_dir, archive),\n297:                     run_baseline=args.run_baseline,\n298:                 )\n299:                 for parent_commit, entry in selfimprove_entries\n300:             ]"
+    },
+    {
+      "start": 315,
+      "end": 332,
+      "text": "315:         # Update archive\n316:         logger.info(f\"Updating archive for generation {gen_num}\")\n317:         selfimprove_ids_compiled = filter_compiled(\n318:             selfimprove_ids,\n319:             output_dir,\n320:             num_swe_issues=[len(swe_issues_sm)] if args.shallow_eval else [len(swe_issues_sm), len(swe_issues_med)], logger=logger\n321:         )\n322:         archive = update_archive(output_dir, archive, selfimprove_ids_compiled, method=args.update_archive, noise_leeway=args.eval_noise)\n323: \n324:         # Save DGM state\n325:         with open(os.path.join(output_dir, \"dgm_metadata.jsonl\"), \"a\") as f:\n326:             f.write(json.dumps({\n327:                 \"generation\": gen_num,\n328:                 \"selfimprove_entries\": selfimprove_entries,\n329:                 \"children\": selfimprove_ids,\n330:                 \"children_compiled\": selfimprove_ids_compiled,\n331:                 \"archive\": archive,\n332:             }, indent=2) + \"\\n\")"
+    }
+  ]
+}

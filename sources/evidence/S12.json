@@ -1,0 +1,34 @@
+{
+  "id": "S12",
+  "name": "LangGraph StateGraph.compile",
+  "kind": "official source code",
+  "url": "https://github.com/langchain-ai/langgraph/blob/9d68e5b3eb1a63027b05e9f0152149ea0284dcdb/libs/langgraph/langgraph/graph/state.py#L131",
+  "checked_on": "2026-10-23",
+  "status": "read_at_run_time",
+  "version": "9d68e5b3eb1a63027b05e9f0152149ea0284dcdb",
+  "repository": "langchain-ai/langgraph",
+  "path": "libs/langgraph/langgraph/graph/state.py",
+  "locator": "[(131, 157), (1177, 1214), (1355, 1365)]",
+  "sha256": "d8c8021a93a8fc895d62335a9482e50d51353343bf885901e6487611dcd0d212",
+  "says": "图编译可独立接受 checkpointer 与 store。",
+  "does_not_claim": "LangGraph 本身等同具体编码 Agent 产品。",
+  "example": "研究→核查节点共享 typed state。",
+  "confidence": "high: static code reading only",
+  "excerpts": [
+    {
+      "start": 131,
+      "end": 157,
+      "text": "131: class StateGraph(Generic[StateT, ContextT, InputT, OutputT]):\n132:     \"\"\"A graph whose nodes communicate by reading and writing to a shared state.\n133: \n134:     The signature of each node is `State -> Partial<State>`.\n135: \n136:     Each state key can optionally be annotated with a reducer function that\n137:     will be used to aggregate the values of that key received from multiple nodes.\n138:     The signature of a reducer function is `(Value, Value) -> Value`.\n139: \n140:     !!! warning\n141: \n142:         `StateGraph` is a builder class and cannot be used directly for execution.\n143:         You must first call `.compile()` to create an executable graph that supports\n144:         methods like `invoke()`, `stream()`, `astream()`, and `ainvoke()`. See the\n145:         `CompiledStateGraph` documentation for more details.\n146: \n147:     Args:\n148:         state_schema: The schema class that defines the state.\n149:         context_schema: The schema class that defines the runtime context.\n150: \n151:             Use this to expose immutable context data to your nodes, like `user_id`, `db_conn`, etc.\n152:         input_schema: The schema class that defines the input to the graph.\n153:         output_schema: The schema class that defines the output from the graph.\n154: \n155:     !!! warning \"`config_schema` Deprecated\"\n156:         The `config_schema` parameter is deprecated in v0.6.0 and support will be removed in v2.0.0.\n157:         Please use `context_schema` instead to specify the schema for run-scoped context."
+    },
+    {
+      "start": 1177,
+      "end": 1214,
+      "text": "1177:     def compile(\n1178:         self,\n1179:         checkpointer: Checkpointer = None,\n1180:         *,\n1181:         cache: BaseCache | None = None,\n1182:         store: BaseStore | None = None,\n1183:         interrupt_before: All | list[str] | None = None,\n1184:         interrupt_after: All | list[str] | None = None,\n1185:         debug: bool = False,\n1186:         name: str | None = None,\n1187:         transformers: Sequence[Callable[[tuple[str, ...]], Any]] | None = None,\n1188:     ) -> CompiledStateGraph[StateT, ContextT, InputT, OutputT]:\n1189:         \"\"\"Compiles the `StateGraph` into a `CompiledStateGraph` object.\n1190: \n1191:         The compiled graph implements the `Runnable` interface and can be invoked,\n1192:         streamed, batched, and run asynchronously.\n1193: \n1194:         Args:\n1195:             checkpointer: A checkpoint saver object or flag.\n1196: \n1197:                 If provided, this `Checkpointer` serves as a fully versioned \"short-term memory\" for the graph,\n1198:                 allowing it to be paused, resumed, and replayed from any point.\n1199: \n1200:                 If `None`, it may inherit the parent graph's checkpointer when used as a subgraph.\n1201: \n1202:                 If `False`, it will not use or inherit any checkpointer.\n1203: \n1204:                 **Important**: When a checkpointer is enabled, you should pass a `thread_id`\n1205:                 in the config when invoking the graph:\n1206: \n1207:                 ```python\n1208:                 config = {\"configurable\": {\"thread_id\": \"my-thread\"}}\n1209:                 graph.invoke(inputs, config)\n1210:                 ```\n1211: \n1212:                 The `thread_id` is the key used to store and retrieve checkpoints. Use a\n1213:                 unique ID for independent runs, or reuse the same ID to accumulate state\n1214:                 across invocations (e.g., for conversation memory)."
+    },
+    {
+      "start": 1355,
+      "end": 1365,
+      "text": "1355:             },\n1356:             input_channels=START,\n1357:             stream_mode=\"updates\",\n1358:             output_channels=output_channels,\n1359:             stream_channels=stream_channels,\n1360:             checkpointer=checkpointer,\n1361:             interrupt_before_nodes=interrupt_before,\n1362:             interrupt_after_nodes=interrupt_after,\n1363:             auto_validate=False,\n1364:             debug=debug,\n1365:             store=store,"
+    }
+  ]
+}

@@ -1,0 +1,78 @@
+{
+  "checked_on": "2026-10-23",
+  "note": "Primary source entry points. Freshness and precise code claims must be verified on every new run.",
+  "sources": [
+    {
+      "id": "S01",
+      "name": "OpenAI · Codex as a platform",
+      "kind": "official engineering article",
+      "date": "2026-08-19",
+      "url": "https://developers.openai.com/blog/codex-as-a-platform",
+      "use": "harness, loop, execution, tools, app-server"
+    },
+    {
+      "id": "S02",
+      "name": "OpenAI · Unlocking the Codex harness",
+      "kind": "official engineering article",
+      "date": "2026-02-04",
+      "url": "https://openai.com/index/unlocking-the-codex-harness/",
+      "use": "thread lifecycle, config/auth, tools, extensions"
+    },
+    {
+      "id": "S03",
+      "name": "DeepSeek · Harness developer preview",
+      "kind": "official project website",
+      "date": "unknown",
+      "url": "https://deepseek.com/harness/",
+      "use": "developer preview; everything-as-plugin framing"
+    },
+    {
+      "id": "S04",
+      "name": "DeepSeek Harness · Architecture",
+      "kind": "official code documentation",
+      "date": "unknown",
+      "url": "https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/architecture.md",
+      "use": "Cordis, profile/bundle, plugin composition"
+    },
+    {
+      "id": "S05",
+      "name": "LangGraph · Persistence",
+      "kind": "official project docs",
+      "date": "unknown",
+      "url": "https://docs.langchain.com/oss/python/langgraph/persistence",
+      "use": "per-thread checkpoints vs cross-thread Store"
+    },
+    {
+      "id": "S06",
+      "name": "Anthropic · Effective context engineering",
+      "kind": "official engineering article",
+      "date": "2025-09-29",
+      "url": "https://www.anthropic.com/research/effective-context-engineering-for-ai-agents",
+      "use": "context selection, compaction, memory, subagents"
+    },
+    {
+      "id": "S07",
+      "name": "OpenHands · Software Agent SDK",
+      "kind": "official code repository",
+      "date": "unknown",
+      "url": "https://github.com/OpenHands/software-agent-sdk",
+      "use": "modular SDK, agent server, tools, events"
+    },
+    {
+      "id": "S08",
+      "name": "Darwin Gödel Machine",
+      "kind": "primary paper",
+      "date": "2025-05-29",
+      "url": "https://arxiv.org/abs/2505.22954",
+      "use": "empirically evaluated self-modification; not general RSI proof"
+    },
+    {
+      "id": "S09",
+      "name": "OpenAI · Build skills",
+      "kind": "official docs",
+      "date": "unknown",
+      "url": "https://learn.chatgpt.com/docs/build-skills",
+      "use": "codex skills, SKILL.md and .agents/skills"
+    }
+  ]
+}

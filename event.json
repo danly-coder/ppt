@@ -1,0 +1,31 @@
+{
+  "event_name": "校友 AI 技术交流会",
+  "event_date": "2026-10-23",
+  "topic": "从大模型到自主智能体：Agent、Harness 与 AI 系统的持续进化",
+  "audience": "既有日常 AI 使用者，也有熟悉开发的校友",
+  "format": "交流素材 + 问题引导，非正式授课",
+  "speaking_minutes": 43,
+  "discussion_minutes": 20,
+  "target_slides": 23,
+  "focal_projects": [
+    "OpenAI Codex",
+    "DeepSeek Harness (DSH)",
+    "LangGraph",
+    "OpenHands"
+  ],
+  "keywords": [
+    "Agent Loop",
+    "Harness",
+    "Context Engineering",
+    "Memory",
+    "Checkpoint",
+    "RSI"
+  ],
+  "styles": {
+    "aspect": "16:9",
+    "theme": "dark",
+    "tone": "通俗且严谨",
+    "editable_diagrams": true
+  },
+  "user_message": "现场会准备一份简要的技术 PPT，为各位校友提供交流素材和话题，主要希望抛砖引玉。"
+}

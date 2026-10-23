@@ -1,0 +1,20 @@
+const fs=require('fs'),path=require('path'),child=require('child_process');
+const root=path.resolve(__dirname,'..');
+const p=JSON.parse(fs.readFileSync(path.join(root,'content/slide_plan.json')));
+const src=JSON.parse(fs.readFileSync(path.join(root,'sources/verified_sources.json')));
+const claims=JSON.parse(fs.readFileSync(path.join(root,'knowledge/claims.json'))).claims;
+const ids=new Set(src.sources.map(s=>s.id)),cm=new Map(claims.map(c=>[c.id,c]));let errs=[];
+if(p.slides.length<14||p.slides.length>30)errs.push('slide count out of expected range');
+p.slides.forEach((s,i)=>{
+ if(s.id!==i+1)errs.push('nonsequential slide id');
+ if(!s.title||!s.main||!s.transition||s.notes?.length<100)errs.push('missing explanation/transition slide '+s.id);
+ for(const id of s.sources||[])if(!ids.has(id))errs.push('unknown source '+id);
+ for(const id of s.claims||[])if(!cm.has(id))errs.push('unknown claim '+id);
+ if(/官方事实|源码事实|CODEX|DSH|LANGGRAPH|OPENHANDS|研究事实/.test(s.label)&&!s.sources.length)errs.push('uncited factual slide '+s.id);
+});
+claims.forEach(c=>{if(!['fact','synthesis','hypothesis'].includes(c.kind))errs.push('bad kind '+c.id);if(!c.source_ids.length||c.source_ids.some(id=>!ids.has(id)))errs.push('claim source '+c.id);});
+src.sources.forEach(s=>{if(!s.checked_on||!s.locator||!s.does_not_claim)errs.push('source metadata '+s.id);if(s.path&&!fs.existsSync(path.join(root,'sources/evidence',s.id+'.json')))errs.push('source evidence '+s.id);});
+const pptx=path.join(root,'output/ai-agent-harness-talk.pptx');
+if(!fs.existsSync(pptx)||fs.statSync(pptx).size<5000)errs.push('PPTX missing or empty');
+const checkXml=child.spawnSync('python3',[path.join(root,'scripts/check_pptx.py')],{encoding:'utf8'});process.stdout.write(checkXml.stdout);if(checkXml.status!==0)errs.push(checkXml.stderr||'PPTX XML check failed');
+if(errs.length){console.error(errs.join('\n'));process.exit(1);}console.log(`PASS: ${p.slides.length} slides, ${src.sources.length} sources, ${claims.length} typed claims, notes, XML, editable shapes and bounds.`);

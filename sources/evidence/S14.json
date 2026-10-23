@@ -1,0 +1,24 @@
+{
+  "id": "S14",
+  "name": "OpenHands Agent.step",
+  "kind": "official source code",
+  "url": "https://github.com/OpenHands/software-agent-sdk/blob/60192ed54db73ac658ac1a07462916126c32d3a0/openhands-sdk/openhands/sdk/agent/agent.py#L690",
+  "checked_on": "2026-10-23",
+  "status": "read_at_run_time",
+  "version": "60192ed54db73ac658ac1a07462916126c32d3a0",
+  "repository": "OpenHands/software-agent-sdk",
+  "path": "openhands-sdk/openhands/sdk/agent/agent.py",
+  "locator": "[(690, 757)]",
+  "sha256": "8773d6e759bced7ca8791b665ae7b457487629b41f812c428f7f7da9713ae1a5",
+  "says": "step 先处理待确认行动，再从会话视图组装消息并处理 condensation。",
+  "does_not_claim": "Agent 对象本身保存所有状态，或压缩等同长期记忆。",
+  "example": "长任务先整理会话视图，再继续调用模型。",
+  "confidence": "high: static code reading only",
+  "excerpts": [
+    {
+      "start": 690,
+      "end": 757,
+      "text": "690:     def step(\n691:         self,\n692:         conversation: LocalConversation,\n693:         on_event: ConversationCallbackType,\n694:         on_token: ConversationTokenCallbackType | None = None,\n695:     ) -> None:\n696:         call_context = conversation.get_llm_call_context()\n697:         with (\n698:             llm_call_context_scope(call_context),\n699:             StreamContext.open(conversation, on_token) as stream,\n700:         ):\n701:             self._step(conversation, on_event, stream)\n702: \n703:     def _step(\n704:         self,\n705:         conversation: LocalConversation,\n706:         on_event: ConversationCallbackType,\n707:         stream: StreamContext,\n708:     ) -> None:\n709:         state = conversation.state\n710:         # Check for pending actions (implicit confirmation)\n711:         # and execute them before sampling new actions.\n712:         pending_actions = ConversationState.get_unmatched_actions(state.active_branch())\n713:         if pending_actions:\n714:             logger.info(\n715:                 \"Confirmation mode: Executing %d pending action(s)\",\n716:                 len(pending_actions),\n717:             )\n718:             self._execute_actions(conversation, pending_actions, on_event)\n719:             return\n720: \n721:         # Check if the last user message was blocked by a UserPromptSubmit hook\n722:         # If so, skip processing and mark conversation as finished\n723:         if state.last_user_message_id is not None:\n724:             reason = state.pop_blocked_message(state.last_user_message_id)\n725:             if reason is not None:\n726:                 logger.info(f\"User message blocked by hook: {reason}\")\n727:                 state.execution_status = ConversationExecutionStatus.FINISHED\n728:                 return\n729:         elif state.blocked_messages:\n730:             logger.debug(\n731:                 \"Blocked messages exist but last_user_message_id is None; \"\n732:                 \"skipping hook check for legacy conversation state.\"\n733:             )\n734: \n735:         # Build per-conversation context once and thread it through all\n736:         # LLM calls in this step (avoids shared mutable state on the LLM).\n737:         call_context: LLMCallContext = conversation.get_llm_call_context()\n738: \n739:         # Establish route-aware runtime metadata (cached, no I/O on a hit)\n740:         # before the condenser decides a token threshold, so a routed model's\n741:         # real endpoint limit drives condensation on the first step.\n742:         self.llm.resolve_runtime_metadata()\n743: \n744:         # Prepare LLM messages from the cached, incrementally-maintained view.\n745:         # See https://github.com/OpenHands/software-agent-sdk/issues/3053.\n746:         _messages_or_condensation = prepare_llm_messages(\n747:             state.view, condenser=self.condenser, llm=self.llm\n748:         )\n749: \n750:         # Process condensation event before agent sampels another action\n751:         if isinstance(_messages_or_condensation, Condensation):\n752:             on_event(_messages_or_condensation)\n753:             return\n754: \n755:         _messages = _messages_or_condensation\n756: \n757:         if _should_handle_non_multimodal_image_input(self.llm, _messages):"
+    }
+  ]
+}
